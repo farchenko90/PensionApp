@@ -16,14 +16,20 @@ class UsuarioDao {
                     $user = new Usuario();
                     $user->mapear($row);
                     $user[] = array(
-                        
+                        "nomb_usua" => $user->getNomb_usua(),
+                        "apel_usua" => $user->getApel_usua(),
+                        "foto_usua" => $user->getFoto_usua(),
+                        "tele_usua" => $user->getTele_usua()
                     );
                 }
                 
             }
         } catch (Exception $exc) {
+            $user = null;
             echo $exc->getTraceAsString();
         }
-        }
+        $conn->desconectar();
+        return $user;
+    }
     
 }
