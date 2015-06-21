@@ -2,6 +2,31 @@
 
 class UsuarioDao {
 
+    public function Nombimagen($correo){
+        $conn = new conexion();
+        $user = null;
+        try {
+            if($conn->conectar()){
+                $str_sql = "Select foto_usua from usuario where emai_usua = '".$correo."'";
+                $sql = $conn->getConn()->prepare($str_sql);
+                $sql->execute();
+                $resultado = $sql->fetchAll();
+                foreach ($resultado as $row){
+                    $user[] = array(
+                        "Foto" => $row['foto_usua']
+                    );
+                }
+                
+            }
+        } catch (Exception $exc) {
+            $user = null;
+            echo $exc->getTraceAsString();
+        }
+        $conn->desconectar();
+        return $user;
+    }
+
+
     public function lista($correo){
         $conn = new conexion();
         $user = null;
@@ -37,7 +62,7 @@ class UsuarioDao {
         $usua = -1;
         try {
             if($conn->conectar()){
-                $str_sql = "Update usuario set foto_usua = '".$usu->getFoto_usua()."'"
+                $str_sql = "Update usuario set foto_usua = '".$usu->getFoto_usua()."' "
                         . " where emai_usua = '".$usu->getEmai_usua()."'";
                 $sql = $conn->getConn()->prepare($str_sql);
                 $usua = $sql->execute();

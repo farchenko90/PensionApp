@@ -1,7 +1,18 @@
 <?php
 $app->get('/usuario/:correo','lista');
-$app->put('/usuario/:ced','modificarusuario');
+$app->put('/usuario','modificarfoto');
 $app->post('/user','guardarfoto');
+$app->get('/user/:correo','fotolista');
+
+function fotolista($correo){
+    
+    $usuDao = new UsuarioDao();
+    
+    $res = $usuDao->Nombimagen($correo);
+    
+    echo json_encode($res,JSON_PRETTY_PRINT);
+    
+}
 
 function lista($correo){
     
@@ -17,11 +28,13 @@ function guardarfoto(){
     
     $r = \Slim\Slim::getInstance()->request(); //pedimos a Slim que nos mande el request
     $p = json_decode($r->getBody()); //como el request esta en json lo decodificamos
-    
-    if(!is_dir("imagenes/")) 
+    if (!is_dir("imagenes/")) {
         mkdir("imagenes/", 0777);
+        $fp = fopen('imagenes/img.jpg', 'wb');
+        fwrite($fp, $r->getBody());
+    }
+
     
-    move_uploaded_file($p->photo, "imagenes/");
     
     
 }
